@@ -4,7 +4,7 @@ namespace System.Runtime.CompilerServices;
 /// Indicates that compiler support for a particular feature is required for the location where this attribute is applied.
 /// </summary>
 [AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = false)]
-public sealed class CompilerFeatureRequiredAttribute(string featureName) : Attribute
+internal sealed class CompilerFeatureRequiredAttribute(string featureName) : Attribute
 {
 	/// <summary>
 	/// The name of the compiler feature.
