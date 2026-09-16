@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>preview</LangVersion>
+    <PackageProjectUrl>https://github.com/ycanardeau/Results</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ycanardeau/Results</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,8 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- The generator runs on this library's own source; its output is compiled into Aigamo.Results.dll.
+         PrivateAssets="all" keeps it out of the produced package as a NuGet dependency. -->
     <ProjectReference Include="..\Aigamo.Results.SourceGeneration\Aigamo.Results.SourceGeneration.csproj"
-                      OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+                      OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>
