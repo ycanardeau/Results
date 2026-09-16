@@ -25,38 +25,62 @@ public static partial class ResultExtensions
 	}
 
 	[GenerateAsyncOverloads]
-	public static Result<U, TError> Map<T, TError, U>(this Result<T, TError> source, Func<T, U> mapping)
-		=> source.Fold(
+	public static Result<U, TError> Map<T, TError, U>(
+		this Result<T, TError> source,
+		Func<T, U> mapping
+	) =>
+		source.Fold(
 			onOk: resultValue => Result.Ok<U, TError>(mapping(resultValue)),
-			onError: Result.Error<U, TError>);
+			onError: Result.Error<U, TError>
+		);
 
 	[GenerateAsyncOverloads]
-	public static Result<T, U> MapError<T, TError, U>(this Result<T, TError> source, Func<TError, U> mapping)
-		=> source.Fold(
+	public static Result<T, U> MapError<T, TError, U>(
+		this Result<T, TError> source,
+		Func<TError, U> mapping
+	) =>
+		source.Fold(
 			onOk: Result.Ok<T, U>,
-			onError: errorValue => Result.Error<T, U>(mapping(errorValue)));
+			onError: errorValue => Result.Error<T, U>(mapping(errorValue))
+		);
 
 	[GenerateAsyncOverloads]
-	public static Result<U, TError> FlatMap<T, TError, U>(this Result<T, TError> source, Func<T, Result<U, TError>> binder)
-		=> source.Fold(
-			onOk: resultValue => binder(resultValue),
-			onError: Result.Error<U, TError>);
+	public static Result<U, TError> FlatMap<T, TError, U>(
+		this Result<T, TError> source,
+		Func<T, Result<U, TError>> binder
+	) => source.Fold(onOk: resultValue => binder(resultValue), onError: Result.Error<U, TError>);
 
 	[GenerateAsyncOverloads]
-	public static Result<T, U> FlatMapError<T, TError, U>(this Result<T, TError> source, Func<TError, Result<T, U>> binder)
-		=> source.Fold(
-			onOk: Result.Ok<T, U>,
-			onError: errorValue => binder(errorValue));
+	public static Result<T, U> FlatMapError<T, TError, U>(
+		this Result<T, TError> source,
+		Func<TError, Result<T, U>> binder
+	) => source.Fold(onOk: Result.Ok<T, U>, onError: errorValue => binder(errorValue));
 
 	[GenerateAsyncOverloads]
-	public static Result<T, TError> Tap<T, TError>(this Result<T, TError> source, Action<T> action)
-		=> source.Fold(
-			onOk: resultValue => { action(resultValue); return source; },
-			onError: _ => source);
+	public static Result<T, TError> Tap<T, TError>(
+		this Result<T, TError> source,
+		Action<T> action
+	) =>
+		source.Fold(
+			onOk: resultValue =>
+			{
+				action(resultValue);
+				return source;
+			},
+			onError: _ => source
+		);
 
 	[GenerateAsyncOverloads]
-	public static Result<T, TError> TapError<T, TError>(this Result<T, TError> source, Action<TError> action)
-		=> source.Fold(
+	public static Result<T, TError> TapError<T, TError>(
+		this Result<T, TError> source,
+		Action<TError> action
+	) =>
+		source.Fold(
 			onOk: _ => source,
-			onError: errorValue => { action(errorValue); return source; });
+			onError: errorValue =>
+			{
+				action(errorValue);
+				return source;
+			}
+		);
 }

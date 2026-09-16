@@ -8,7 +8,8 @@ public class AsyncOverloadGeneratorTests
 	// A realistic core that mirrors the library: a Fold helper plus a [GenerateAsyncOverloads]
 	// method whose *sibling* branch is a method group (Result.Error). This is the exact shape
 	// that regressed — the async variant must lift the method group, not just lambda branches.
-	private const string MapSource = @"
+	private const string MapSource =
+		@"
 using System;
 using System.Threading.Tasks;
 
@@ -44,7 +45,8 @@ namespace Aigamo.Results
     }
 }";
 
-	private const string NoAttributeSource = @"
+	private const string NoAttributeSource =
+		@"
 namespace Aigamo.Results
 {
     public static class Plain { public static int Echo(int x) => x; }
@@ -53,7 +55,8 @@ namespace Aigamo.Results
 	// A Combine-style core where the selector result is chained into a further call
 	// (binder(value).Map(...)). The async lift must parenthesize the awaited selector so
 	// the .Map applies to the awaited value, not to the whole awaited chain.
-	private const string ChainedSource = @"
+	private const string ChainedSource =
+		@"
 using System;
 using System.Threading.Tasks;
 
@@ -102,11 +105,16 @@ namespace Aigamo.Results
 	{
 		var (output, _) = Run(MapSource);
 
-		var errors = output.GetDiagnostics()
+		var errors = output
+			.GetDiagnostics()
 			.Where(d => d.Severity == DiagnosticSeverity.Error)
 			.ToArray();
 
-		Assert.True(errors.Length == 0, "Generated code did not compile:\n" + string.Join("\n", errors.Select(e => e.ToString())));
+		Assert.True(
+			errors.Length == 0,
+			"Generated code did not compile:\n"
+				+ string.Join("\n", errors.Select(e => e.ToString()))
+		);
 	}
 
 	[Fact]
@@ -140,8 +148,9 @@ namespace Aigamo.Results
 	{
 		var result = Run(NoAttributeSource).Result;
 
-		var overloadFiles = result.Results.Single().GeneratedSources
-			.Where(s => s.HintName.EndsWith(".AsyncOverloads.g.cs"));
+		var overloadFiles = result
+			.Results.Single()
+			.GeneratedSources.Where(s => s.HintName.EndsWith(".AsyncOverloads.g.cs"));
 
 		Assert.Empty(overloadFiles);
 	}
@@ -152,11 +161,16 @@ namespace Aigamo.Results
 	{
 		var (output, _) = Run(ChainedSource);
 
-		var errors = output.GetDiagnostics()
+		var errors = output
+			.GetDiagnostics()
 			.Where(d => d.Severity == DiagnosticSeverity.Error)
 			.ToArray();
 
-		Assert.True(errors.Length == 0, "Generated code did not compile:\n" + string.Join("\n", errors.Select(e => e.ToString())));
+		Assert.True(
+			errors.Length == 0,
+			"Generated code did not compile:\n"
+				+ string.Join("\n", errors.Select(e => e.ToString()))
+		);
 	}
 
 	[Fact]
@@ -170,10 +184,12 @@ namespace Aigamo.Results
 	// ---- harness ----------------------------------------------------------
 
 	private static readonly MetadataReference[] References =
-		[.. ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")!)
+	[
+		.. ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")!)
 			.Split(Path.PathSeparator)
 			.Where(p => p.Length > 0)
-			.Select(p => (MetadataReference)MetadataReference.CreateFromFile(p))];
+			.Select(p => (MetadataReference)MetadataReference.CreateFromFile(p)),
+	];
 
 	private static (Compilation Output, GeneratorDriverRunResult Result) Run(string source)
 	{
@@ -183,19 +199,25 @@ namespace Aigamo.Results
 			"GeneratorTests",
 			[tree],
 			References,
-			new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, nullableContextOptions: NullableContextOptions.Enable));
+			new CSharpCompilationOptions(
+				OutputKind.DynamicallyLinkedLibrary,
+				nullableContextOptions: NullableContextOptions.Enable
+			)
+		);
 
 		// The driver must parse the generated trees with the same language version as the
 		// input, otherwise the updated compilation has inconsistent language versions.
 		GeneratorDriver driver = CSharpGeneratorDriver.Create(
 			[new AsyncOverloadGenerator().AsSourceGenerator()],
-			parseOptions: parseOptions);
+			parseOptions: parseOptions
+		);
 		driver = driver.RunGeneratorsAndUpdateCompilation(compilation, out var output, out _);
 		return (output, driver.GetRunResult());
 	}
 
-	private static string GeneratedOverloads(GeneratorDriverRunResult result)
-		=> result.Results.Single().GeneratedSources
-			.Single(s => s.HintName.EndsWith(".AsyncOverloads.g.cs"))
+	private static string GeneratedOverloads(GeneratorDriverRunResult result) =>
+		result
+			.Results.Single()
+			.GeneratedSources.Single(s => s.HintName.EndsWith(".AsyncOverloads.g.cs"))
 			.SourceText.ToString();
 }

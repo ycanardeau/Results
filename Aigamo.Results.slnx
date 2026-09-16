@@ -1,7 +1,7 @@
 <Solution>
-  <Project Path="Aigamo.Results.ConsoleApp/Aigamo.Results.ConsoleApp.csproj" />
-  <Project Path="Aigamo.Results/Aigamo.Results.csproj" />
-  <Project Path="Aigamo.Results.SourceGeneration/Aigamo.Results.SourceGeneration.csproj" />
-  <Project Path="Aigamo.Results.Tests/Aigamo.Results.Tests.csproj" />
-  <Project Path="Aigamo.Results.SourceGeneration.Tests/Aigamo.Results.SourceGeneration.Tests.csproj" />
+	<Project Path="Aigamo.Results.ConsoleApp/Aigamo.Results.ConsoleApp.csproj" />
+	<Project Path="Aigamo.Results/Aigamo.Results.csproj" />
+	<Project Path="Aigamo.Results.SourceGeneration/Aigamo.Results.SourceGeneration.csproj" />
+	<Project Path="Aigamo.Results.Tests/Aigamo.Results.Tests.csproj" />
+	<Project Path="Aigamo.Results.SourceGeneration.Tests/Aigamo.Results.SourceGeneration.Tests.csproj" />
 </Solution>

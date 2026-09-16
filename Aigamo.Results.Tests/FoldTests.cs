@@ -7,10 +7,10 @@ public class FoldTests
 	private static readonly Result<int, string> Err = Result.Error<int, string>("boom");
 
 	[Fact]
-	public void Ok_runs_onOk_branch_with_value()
-		=> Assert.Equal("ok:3", Ok.Fold(onOk: x => $"ok:{x}", onError: e => $"err:{e}"));
+	public void Ok_runs_onOk_branch_with_value() =>
+		Assert.Equal("ok:3", Ok.Fold(onOk: x => $"ok:{x}", onError: e => $"err:{e}"));
 
 	[Fact]
-	public void Error_runs_onError_branch_with_value()
-		=> Assert.Equal("err:boom", Err.Fold(onOk: x => $"ok:{x}", onError: e => $"err:{e}"));
+	public void Error_runs_onError_branch_with_value() =>
+		Assert.Equal("err:boom", Err.Fold(onOk: x => $"ok:{x}", onError: e => $"err:{e}"));
 }

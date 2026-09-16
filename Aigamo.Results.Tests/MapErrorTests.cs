@@ -10,7 +10,12 @@ public class MapErrorTests
 	private static readonly Result<int, int> MappedErr = Result.Error<int, int>(4); // "boom".Length
 
 	private static int Sync(string e) => e.Length;
-	private static async Task<int> AsyncFn(string e) { await Task.Yield(); return e.Length; }
+
+	private static async Task<int> AsyncFn(string e)
+	{
+		await Task.Yield();
+		return e.Length;
+	}
 
 	[Fact]
 	public void Sync_Ok() => Assert.Equal(MappedOk, Ok.MapError(Sync));
@@ -20,23 +25,29 @@ public class MapErrorTests
 
 	// Variant A: Task source, sync selector.
 	[Fact]
-	public async Task TaskSource_SyncSelector_Ok() => Assert.Equal(MappedOk, await Task.FromResult(Ok).MapError(Sync));
+	public async Task TaskSource_SyncSelector_Ok() =>
+		Assert.Equal(MappedOk, await Task.FromResult(Ok).MapError(Sync));
 
 	[Fact]
-	public async Task TaskSource_SyncSelector_Error() => Assert.Equal(MappedErr, await Task.FromResult(Err).MapError(Sync));
+	public async Task TaskSource_SyncSelector_Error() =>
+		Assert.Equal(MappedErr, await Task.FromResult(Err).MapError(Sync));
 
 	// Variant B: sync source, async selector.
 	// On Ok the async-lifted method-group sibling (Result.Ok) must preserve the ok value.
 	[Fact]
-	public async Task SyncSource_AsyncSelector_Ok_preserves_value() => Assert.Equal(MappedOk, await Ok.MapError(AsyncFn));
+	public async Task SyncSource_AsyncSelector_Ok_preserves_value() =>
+		Assert.Equal(MappedOk, await Ok.MapError(AsyncFn));
 
 	[Fact]
-	public async Task SyncSource_AsyncSelector_Error() => Assert.Equal(MappedErr, await Err.MapError(AsyncFn));
+	public async Task SyncSource_AsyncSelector_Error() =>
+		Assert.Equal(MappedErr, await Err.MapError(AsyncFn));
 
 	// Variant C: Task source, async selector.
 	[Fact]
-	public async Task TaskSource_AsyncSelector_Ok() => Assert.Equal(MappedOk, await Task.FromResult(Ok).MapError(AsyncFn));
+	public async Task TaskSource_AsyncSelector_Ok() =>
+		Assert.Equal(MappedOk, await Task.FromResult(Ok).MapError(AsyncFn));
 
 	[Fact]
-	public async Task TaskSource_AsyncSelector_Error() => Assert.Equal(MappedErr, await Task.FromResult(Err).MapError(AsyncFn));
+	public async Task TaskSource_AsyncSelector_Error() =>
+		Assert.Equal(MappedErr, await Task.FromResult(Err).MapError(AsyncFn));
 }

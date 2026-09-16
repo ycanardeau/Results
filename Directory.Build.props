@@ -1,14 +1,12 @@
 <Project>
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Aigamo.MatchGenerator" />
-    <Using Include="Aigamo.MatchGenerator" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<PackageReference Include="Aigamo.MatchGenerator" />
+		<Using Include="Aigamo.MatchGenerator" />
+	</ItemGroup>
 </Project>

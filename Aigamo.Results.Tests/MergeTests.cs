@@ -7,7 +7,12 @@ public class MergeTests
 	[Fact]
 	public void All_ok_collects_values()
 	{
-		var merged = new[] { Result.Ok<int, string>(1), Result.Ok<int, string>(2), Result.Ok<int, string>(3) }.Merge();
+		var merged = new[]
+		{
+			Result.Ok<int, string>(1),
+			Result.Ok<int, string>(2),
+			Result.Ok<int, string>(3),
+		}.Merge();
 		Assert.Equal(new[] { 1, 2, 3 }, Values(merged));
 	}
 
@@ -33,7 +38,11 @@ public class MergeTests
 	[Fact]
 	public async Task TaskSource_collects_values()
 	{
-		IEnumerable<Result<int, string>> source = new[] { Result.Ok<int, string>(1), Result.Ok<int, string>(2) };
+		IEnumerable<Result<int, string>> source = new[]
+		{
+			Result.Ok<int, string>(1),
+			Result.Ok<int, string>(2),
+		};
 		var merged = await Task.FromResult(source).Merge();
 		Assert.Equal(new[] { 1, 2 }, Values(merged));
 	}

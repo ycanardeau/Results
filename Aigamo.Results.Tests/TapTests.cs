@@ -31,7 +31,11 @@ public class TapTests
 	public async Task Tap_AsyncAction_Ok_runs()
 	{
 		int? seen = null;
-		var result = await Ok.Tap(async x => { await Task.Yield(); seen = x; });
+		var result = await Ok.Tap(async x =>
+		{
+			await Task.Yield();
+			seen = x;
+		});
 		Assert.Equal(Ok, result);
 		Assert.Equal(3, seen);
 	}
@@ -40,7 +44,11 @@ public class TapTests
 	public async Task Tap_AsyncAction_Error_skips()
 	{
 		var ran = false;
-		var result = await Err.Tap(async _ => { await Task.Yield(); ran = true; });
+		var result = await Err.Tap(async _ =>
+		{
+			await Task.Yield();
+			ran = true;
+		});
 		Assert.Equal(Err, result);
 		Assert.False(ran);
 	}
@@ -60,7 +68,12 @@ public class TapTests
 	public async Task Tap_TaskSource_AsyncAction_Ok_runs()
 	{
 		int? seen = null;
-		var result = await Task.FromResult(Ok).Tap(async x => { await Task.Yield(); seen = x; });
+		var result = await Task.FromResult(Ok)
+			.Tap(async x =>
+			{
+				await Task.Yield();
+				seen = x;
+			});
 		Assert.Equal(Ok, result);
 		Assert.Equal(3, seen);
 	}
@@ -90,7 +103,11 @@ public class TapTests
 	public async Task TapError_AsyncAction_Error_runs()
 	{
 		string? seen = null;
-		var result = await Err.TapError(async e => { await Task.Yield(); seen = e; });
+		var result = await Err.TapError(async e =>
+		{
+			await Task.Yield();
+			seen = e;
+		});
 		Assert.Equal(Err, result);
 		Assert.Equal("boom", seen);
 	}
@@ -99,7 +116,11 @@ public class TapTests
 	public async Task TapError_AsyncAction_Ok_skips()
 	{
 		var ran = false;
-		var result = await Ok.TapError(async _ => { await Task.Yield(); ran = true; });
+		var result = await Ok.TapError(async _ =>
+		{
+			await Task.Yield();
+			ran = true;
+		});
 		Assert.Equal(Ok, result);
 		Assert.False(ran);
 	}
