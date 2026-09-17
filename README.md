@@ -14,6 +14,8 @@
 - Rich functional API: `Map`, `MapError`, `FlatMap`, `FlatMapError`, `Fold`, `Tap`, `GetOr`, `Combine`, `Merge`, `MapEach`, `Flatten`, `Validate`, `Contains`, and more
 - **Async all the way**: every operation has `Task`-lifted overloads, so sync and async steps chain seamlessly
 - `Unit` for value-less results (`Result<Unit, TError>`)
+- **Implicit conversions**: return a value or an error directly and let it become a `Result<T, TError>`
+- An optional **analyzer** to enforce implicit- or explicit-construction style across a project
 
 ## Getting Started
 
@@ -45,14 +47,25 @@ Result<int, string> ok = Result.Ok<int, string>(42);
 Result<int, string> error = Result.Error<int, string>("something went wrong");
 ```
 
+A value or an error also converts **implicitly**, so you can often drop the factory call:
+
+```csharp
+Result<int, string> ok = 42;                    // -> Ok(42)
+Result<int, string> error = "something went wrong"; // -> Error("something went wrong")
+```
+
 A function that can fail returns its outcome instead of throwing:
 
 ```csharp
 static Result<int, string> Parse(string s) =>
 	int.TryParse(s, out var value)
-		? Result.Ok<int, string>(value)
-		: Result.Error<int, string>($"'{s}' is not a number");
+		? value                                 // implicit -> Ok(value)
+		: $"'{s}' is not a number";             // implicit -> Error(...)
 ```
+
+> **Note:** implicit conversion is unavailable when `T` and `TError` are the **same type**
+> (`Result<string, string>`) — the two conversions are ambiguous (CS0457). Use the explicit
+> `Result.Ok` / `Result.Error` factories there.
 
 ### 3. Inspect the outcome
 
@@ -131,6 +144,27 @@ var back = JsonSerializer.Deserialize<Result<int, string>>(json);
 ```
 
 An `Error` serializes as `{"$type":"Error","ErrorValue":...}`. No custom converter or configuration required.
+
+## Enforcing a conversion style
+
+Whether to write `Result.Ok(value)` explicitly or lean on the implicit conversion is a matter of taste — so the package ships an analyzer that lets a project pick one and enforce it. Set the policy in `.editorconfig`:
+
+```ini
+[*.cs]
+# choose one:
+aigamo_results_conversion_style = implicit   # or: explicit
+```
+
+- `implicit` → **ARS001** flags an explicit `Result.Ok` / `Result.Error` call where the value could convert implicitly, and the code fix removes the wrapper.
+- `explicit` → **ARS002** flags reliance on the implicit conversion, and the code fix wraps the value in `Result.Ok` / `Result.Error`.
+
+When the key is unset, neither rule fires. Both default to **warning** severity and can be tuned per rule:
+
+```ini
+dotnet_diagnostic.ARS001.severity = suggestion
+```
+
+`ARS001` is never reported for `Result<T, T>`, where implicit conversion is ambiguous.
 
 ## Under the hood
 

@@ -1,5 +1,7 @@
 <Solution>
+	<Project Path="Aigamo.Results.Analyzers/Aigamo.Results.Analyzers.csproj" />
 	<Project Path="Aigamo.Results.Benchmarks/Aigamo.Results.Benchmarks.csproj" />
+	<Project Path="Aigamo.Results.CodeFixes/Aigamo.Results.CodeFixes.csproj" />
 	<Project Path="Aigamo.Results.ConsoleApp/Aigamo.Results.ConsoleApp.csproj" />
 	<Project Path="Aigamo.Results/Aigamo.Results.csproj" />
 	<Project Path="Aigamo.Results.SourceGeneration/Aigamo.Results.SourceGeneration.csproj" />

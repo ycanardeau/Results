@@ -26,4 +26,35 @@
 			PrivateAssets="all"
 		/>
 	</ItemGroup>
+
+	<!-- Ship the conversion-style analyzer and its code fix to consumers, in the package's
+	     analyzers/dotnet/cs folder. ReferenceOutputAssembly="false" only orders the build;
+	     these are tools, not compile/runtime dependencies of the library. -->
+	<ItemGroup>
+		<ProjectReference
+			Include="..\Aigamo.Results.Analyzers\Aigamo.Results.Analyzers.csproj"
+			ReferenceOutputAssembly="false"
+			PrivateAssets="all"
+		/>
+		<ProjectReference
+			Include="..\Aigamo.Results.CodeFixes\Aigamo.Results.CodeFixes.csproj"
+			ReferenceOutputAssembly="false"
+			PrivateAssets="all"
+		/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None
+			Include="..\Aigamo.Results.Analyzers\bin\$(Configuration)\netstandard2.0\Aigamo.Results.Analyzers.dll"
+			Pack="true"
+			PackagePath="analyzers/dotnet/cs"
+			Visible="false"
+		/>
+		<None
+			Include="..\Aigamo.Results.CodeFixes\bin\$(Configuration)\netstandard2.0\Aigamo.Results.CodeFixes.dll"
+			Pack="true"
+			PackagePath="analyzers/dotnet/cs"
+			Visible="false"
+		/>
+	</ItemGroup>
 </Project>
