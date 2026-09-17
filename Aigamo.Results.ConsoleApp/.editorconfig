@@ -1,0 +1,3 @@
+[*.cs]
+# Try the conversion-style analyzer here. Flip to `explicit` to see ARS002 instead.
+aigamo_results_conversion_style = implicit

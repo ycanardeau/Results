@@ -9,4 +9,20 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Aigamo.Results\Aigamo.Results.csproj" />
 	</ItemGroup>
+
+	<!-- Apply the conversion-style analyzer and its code fix here, the way a consumer gets them
+	     from the NuGet package's analyzers/dotnet/cs folder. A plain ProjectReference to the
+	     library does not carry them, so reference them as analyzers directly. -->
+	<ItemGroup>
+		<ProjectReference
+			Include="..\Aigamo.Results.Analyzers\Aigamo.Results.Analyzers.csproj"
+			OutputItemType="Analyzer"
+			ReferenceOutputAssembly="false"
+		/>
+		<ProjectReference
+			Include="..\Aigamo.Results.CodeFixes\Aigamo.Results.CodeFixes.csproj"
+			OutputItemType="Analyzer"
+			ReferenceOutputAssembly="false"
+		/>
+	</ItemGroup>
 </Project>
