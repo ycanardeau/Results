@@ -12,6 +12,7 @@ namespace Aigamo.Results;
 //   - Task source, Task selector
 public static partial class ResultExtensions
 {
+	[GenerateAsyncOverloads]
 	public static R Fold<T, TError, R>(
 		this Result<T, TError> source,
 		Func<T, R> onOk,
