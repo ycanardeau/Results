@@ -20,8 +20,8 @@ public static partial class ResultExtensions
 	)
 	{
 		return source.Match(
-			onOk: ok => onOk(ok.ResultValue),
-			onError: error => onError(error.ErrorValue)
+			Ok: ok => onOk(ok.ResultValue),
+			Error: error => onError(error.ErrorValue)
 		);
 	}
 
